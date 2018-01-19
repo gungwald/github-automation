@@ -15,7 +15,7 @@ read BASE_URL < "$BASE_URL_CONF"
 OS=$(uname -o)
 IFS=,
 
-while read PROJECT BUILD_CMD INSTALL_CMD
+cat "$PROJECTS_CONF" | tr -d '\r' | while read PROJECT
 do
 	if [ -d "$GIT_DIR/$PROJECT" ]
 	then
@@ -40,5 +40,5 @@ do
 	then
 		gradle build install
 	fi
-done < "$PROJECTS_CONF"
+done
 
