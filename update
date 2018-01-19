@@ -12,6 +12,7 @@ GIT_DIR=$(dirname "$BIN_DIR")
 
 read BASE_URL < "$BASE_URL_CONF"
 
+OS=$(uname -o)
 IFS=,
 
 while read PROJECT BUILD_CMD INSTALL_CMD
@@ -25,7 +26,19 @@ do
 		git clone "$BASE_URL/$PROJECT".git
 		cd "$PROJECT"
 	fi
-	$BUILD_CMD
-	$INSTALL_CMD
+
+	if [ -f Makefile.$OS ]
+	then
+		make -f Makefile.$OS install
+	elif [ -f Makefile ]
+	then
+		make install
+	elif [ -f build.xml ]
+	then
+		ant install
+	elif [ -f build.gradle ]
+	then
+		gradle build install
+	fi
 done < "$PROJECTS_CONF"
 
