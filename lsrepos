@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+
+from github import Github
+import getpass
+
+blacklist = ["applelin","boinc","cc65","kaffe","mate-applets","mate-desktop"]
+uid = "gungwald"
+pwd = getpass.getpass("Password for " + uid + ":") 
+
+g = Github(uid, pwd)
+
+for repo in g.get_user().get_repos(type="owner"):
+    if repo.name not in blacklist:
+        print(repo.name)

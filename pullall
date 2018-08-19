@@ -1,0 +1,23 @@
+#!/bin/sh
+
+BIN_DIR=$(dirname "$0")
+if [ "$BIN_DIR" = "." ]
+then
+	BIN_DIR=$(pwd)
+fi
+
+BASE_URL="https://github.com/gungwald"
+GIT_DIR=$(dirname "$BIN_DIR")
+
+"$BIN_DIR"/lsrepos | while read REPO
+do
+	if [ -d "$GIT_DIR/$REPO" ]
+	then
+		cd "$GIT_DIR/$REPO"
+		git pull origin master
+	else
+		cd "$GIT_DIR"
+		git clone "$BASE_URL/$REPO".git
+	fi
+done
+
